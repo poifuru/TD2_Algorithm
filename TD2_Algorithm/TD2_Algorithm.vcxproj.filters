@@ -14,14 +14,47 @@
     <Filter Include="KamataEngine\Adapter">
       <UniqueIdentifier>{c6468eb4-788b-4a83-b207-a5f4804e56c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{b993d1e6-35af-4679-8575-f440d3c0769b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player\Bullet">
+      <UniqueIdentifier>{90a78408-76eb-4077-8677-6aca6f8045f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneManager">
+      <UniqueIdentifier>{433f7a47-722d-43f9-8339-b310773f7bf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{ee38b256-fa87-432b-bcc6-945fa2595cbd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp">
       <Filter>KamataEngine\Adapter</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Player\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
     <ClCompile Include="Obj.cpp">
-      <Filter>KamataEngine</Filter>
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="function.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,7 +139,35 @@
     <ClInclude Include="C:\KamataEngine\DirectXGame\2d\ImGuiManager.h">
       <Filter>KamataEngine\Include</Filter>
     </ClInclude>
-    <ClInclude Include="struct.h" />
-    <ClInclude Include="Obj.h" />
+    <ClInclude Include="Player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Player\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Shape.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="struct.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="function.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

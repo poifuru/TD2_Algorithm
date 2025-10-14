@@ -3,11 +3,10 @@
 
 class Obj {
 public:
-	virtual void Initialize ();
-	virtual void Update ();
 	virtual void Draw ();
 
 protected:
+	//position
 	Vector2 <float> pos_;
 	Vector2 <float> radius_;
 

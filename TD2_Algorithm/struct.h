@@ -7,10 +7,7 @@ struct Vector2 {
 	t y;
 };
 
-struct Circle {
-	Vector2 <float> pos;
-	Vector2 <float> radius;
-	float angle;
-	float color[4];
-	FillMode fillMode;
+struct Segment {
+	Vector2<float> origin; //始点
+	Vector2<float> diff;	//終点への差分ベクトル
 };
