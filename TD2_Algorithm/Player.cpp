@@ -4,6 +4,7 @@
 #include <cmath>
 
 const float kGravity = -9.8f;
+const float kMaxFallSpeed = 20.0f;
 const float deltaTime = 1.0f / 60.0f;
 
 void Player::Initialize (Keyboard* keyboard) {
@@ -60,7 +61,7 @@ void Player::Rotate () {
 }
 
 void Player::Fire () {
-	if (keyboard_->IsTrigger(DIK_SPACE)) {
+	if (keyboard_->IsTrigger (DIK_SPACE)) {
 		for (auto& b : bullet) {
 			if (!b.GetIsActive ()) {
 				b.Initialize (cannonPos_, sinf (rad_), cosf (rad_));
@@ -71,16 +72,21 @@ void Player::Fire () {
 	}
 }
 
-void Player::Repulsion () {
-	velocity_ = {0.0f, 0.0f};
+void Player::SpeedCalculation () {
+	if (pos_.x - radius_.x <= 0.0f || pos_.x + radius_.x >= 1280.0f) {
+		velocity_.x += -1.0f;
+	}
+
+	velocity_.y += kGravity * deltaTime;
 }
 
-void Player::Update () {
+void Player::Input () {
 	Jump ();
 	Fire ();
 
-	velocity_.y += kGravity * deltaTime;
+}
 
+void Player::Update () {
 	//座標更新
 	pos_.x += velocity_.x;
 	pos_.y -= velocity_.y;

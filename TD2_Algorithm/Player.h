@@ -12,8 +12,8 @@ public:
 	void Jump ();
 	void Rotate ();
 	void Fire ();
-	void Repulsion ();
-
+	void SpeedCalculation ();
+	void Input ();
 	void Update ();
 	void Draw () override;
 

@@ -47,6 +47,9 @@ Vector2<float> operator+(const Vector2<float>& v1, const Vector2<float>& v2) { r
 Vector2<float> operator-(const Vector2<float>& v1, const Vector2<float>& v2) { return Subtract (v1, v2); }
 Vector2<float> operator*(float s, const Vector2<float>& v) { return Multiply (s, v); }
 Vector2<float> operator*(const Vector2<float>& v, float s) { return s * v; }
+Vector2<float> operator*(const Vector2<float>& v1, const Vector2<float>& v2) {
+	return { v1.x * v2.x, v1.y * v2.y };
+}
 Vector2<float> operator/(const Vector2<float>& v, float s) { return Multiply (1.0f / s, v); }
 /*単項演算子*/
 Vector2<float> operator+(const Vector2<float>& v) { return { -v.x, -v.y, }; }
@@ -83,3 +86,28 @@ Vector2<float> ClosestPoint (const Vector2<float>& point, const Segment& segment
 		return projection;
 	}
 }
+
+Vector2<float> Reflect (const Vector2<float>& input, Vector2<float>& normal) {
+	Vector2<float> reflect;
+
+	normal = Normalize (normal);
+
+	float dot = Dot (input, normal);
+
+	reflect = input - normal * (2.0f * dot);
+	return reflect;
+}
+
+bool isCollision (const Vector2<float>& pos, const Vector2<float>& radius, const Segment& segment) {
+	//ぷれいやーと地面の最近接点を求める
+	Vector2<float> closest = ClosestPoint (pos, segment);
+
+	//最近接点からプレイヤーの距離を出す
+	Vector2<float> diff = Subtract (closest, pos);
+	float distance = Length (diff);
+
+	//距離よりプレイヤーの位置+半径が小さいか
+	return distance < radius.x;
+}
+
+

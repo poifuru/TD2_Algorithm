@@ -28,6 +28,7 @@ Vector2<float> operator+(const Vector2<float>& v1, const Vector2<float>& v2);
 Vector2<float> operator-(const Vector2<float>& v1, const Vector2<float>& v2);
 Vector2<float> operator*(float s, const Vector2<float>& v);
 Vector2<float> operator*(const Vector2<float>& v, float s);
+Vector2<float> operator*(const Vector2<float>& v1, const Vector2<float>& v2);
 Vector2<float> operator/(const Vector2<float>& v, float s);
 /*単項演算子*/
 Vector2<float> operator+(const Vector2<float>& v);
@@ -38,3 +39,9 @@ Vector2<float> Project (const Vector2<float>& v1, const Vector2<float>& v2);
 
 //最近接点を求める関数
 Vector2<float> ClosestPoint (const Vector2<float>& point, const Segment& segment);
+
+//反射ベクトルを求める関数
+Vector2<float> Reflect (const Vector2<float>& input, Vector2<float>& normal);
+
+//当たり判定の関数群
+bool isCollision (const Vector2<float>& pos, const Vector2<float>& radius, const Segment& segment);
