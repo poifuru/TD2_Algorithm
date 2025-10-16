@@ -9,9 +9,9 @@ const float deltaTime = 1.0f / 60.0f;
 
 void Player::Initialize (Keyboard* keyboard) {
 	keyboard_ = keyboard;
-	pos_ = { 500.0f, 400.0f };
+	pos_ = { 100.0f, 400.0f };
 	radius_ = { 30.0f, 30.0f };
-	velocity_ = {};
+	velocity_ = {-1.0f, 0.0f};
 
 	cannonPos_ = { pos_.x, pos_.y - radius_.y };
 	cannonRadius_ = { 12.0f, 24.0f };
@@ -28,13 +28,13 @@ void Player::Initialize (Keyboard* keyboard) {
 
 void Player::Jump () {
 	if (keyboard_->IsTrigger (DIK_SPACE)) {
-		if (pos_.x <= 640.0f) {
-			velocity_.x = 5.0f;
-			velocity_.y = 7.0f;
+		if (pos_.x <= 250.0f) {
+			velocity_.x = 4.0f;
+			velocity_.y = 6.0f;
 		}
-		else if (pos_.x >= 640.0f) {
-			velocity_.x = -5.0f;
-			velocity_.y = 7.0f;
+		else if (pos_.x >= 250.0f) {
+			velocity_.x = -4.0f;
+			velocity_.y = 6.0f;
 		}
 	}
 }
@@ -73,8 +73,11 @@ void Player::Fire () {
 }
 
 void Player::SpeedCalculation () {
-	if (pos_.x - radius_.x <= 0.0f || pos_.x + radius_.x >= 1280.0f) {
+	if (pos_.x - radius_.x <= 0.0f || pos_.x + radius_.x >= 500.0f) {
 		velocity_.x *= -1.0f;
+	}
+	if (pos_.y - radius_.y <= 0.0f) {
+		velocity_.y = 0.0f;
 	}
 
 	velocity_.y += kGravity * deltaTime;
@@ -127,14 +130,7 @@ void Player::Draw () {
 	);
 
 	//弾
-	int i = 0;
 	for (auto& b : bullet) {
 		b.Draw ();
-		Novice::ScreenPrintf (10, 50 + 20 * i, "isActive %d bulletPos x:%f, y:%f", b.GetIsActive (), b.GetPos ().x, b.GetPos ().y);
-		i++;
 	}
-
-	//デバッグ用
-	Novice::ScreenPrintf (10, 10, "cannonRadius x:%f, y:%f", cannonRadius_.x, cannonRadius_.y);
-	Novice::ScreenPrintf (10, 30, "angle %f", angle_);
 }

@@ -15,5 +15,10 @@ private:
 
 	//地面
 	Segment ground[2];
-	CollisionResult collisionResult_;
+	CollisionResult collisionResult_[2];
+	//反射のx成分を反転したかのフラグ
+	bool xRef[2] = { false, false };
+	bool boundWall[2] = { false, false };
+	//反射させる
+	Vector2<float> reflect;
 };

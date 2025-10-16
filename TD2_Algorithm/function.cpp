@@ -95,6 +95,7 @@ Vector2<float> Reflect (const Vector2<float>& input, Vector2<float>& normal) {
 	float dot = Dot (input, normal);
 
 	reflect = input - normal * (2.0f * dot);
+	
 	return reflect;
 }
 
