@@ -98,16 +98,36 @@ Vector2<float> Reflect (const Vector2<float>& input, Vector2<float>& normal) {
 	return reflect;
 }
 
-bool isCollision (const Vector2<float>& pos, const Vector2<float>& radius, const Segment& segment) {
+CollisionResult isCollision (const Vector2<float>& pos, const Vector2<float>& radius, const Segment& segment) {
+	CollisionResult result;
 	//ぷれいやーと地面の最近接点を求める
-	Vector2<float> closest = ClosestPoint (pos, segment);
+	result.closest = ClosestPoint (pos, segment);
 
-	//最近接点からプレイヤーの距離を出す
-	Vector2<float> diff = Subtract (closest, pos);
+	//プレイヤーから最近接点までのベクトルを出す
+	Vector2<float> diff = Subtract (pos, result.closest);
 	float distance = Length (diff);
 
 	//距離よりプレイヤーの位置+半径が小さいか
-	return distance < radius.x;
+	if (distance < radius.x) {
+		result.isColliding = true;
+	}
+	else {
+		result.isColliding = false;
+	}
+
+	//線分の方向ベクトルから法線を作る
+	Vector2<float> ab = Subtract (segment.diff, segment.origin);
+	//求めたベクトルを回転させて法線にする
+	result.normal = Normalize ({ -ab.y, ab.x });
+	//内積をチェックして向きを調整
+	if (Dot (result.normal, diff) < 0.0f) {
+		result.normal = Multiply (-1.0f, result.normal);
+	}
+
+	//押し戻す量を求める(半径-距離)
+	result.penetration = radius.x - distance;
+
+	return result;
 }
 
 

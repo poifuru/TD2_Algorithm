@@ -44,4 +44,4 @@ Vector2<float> ClosestPoint (const Vector2<float>& point, const Segment& segment
 Vector2<float> Reflect (const Vector2<float>& input, Vector2<float>& normal);
 
 //当たり判定の関数群
-bool isCollision (const Vector2<float>& pos, const Vector2<float>& radius, const Segment& segment);
+CollisionResult isCollision (const Vector2<float>& pos, const Vector2<float>& radius, const Segment& segment);

@@ -74,7 +74,7 @@ void Player::Fire () {
 
 void Player::SpeedCalculation () {
 	if (pos_.x - radius_.x <= 0.0f || pos_.x + radius_.x >= 1280.0f) {
-		velocity_.x += -1.0f;
+		velocity_.x *= -1.0f;
 	}
 
 	velocity_.y += kGravity * deltaTime;

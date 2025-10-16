@@ -1,6 +1,10 @@
 #include "PlayScene.h"
 #include "Shape.h"
 #include "function.h"
+#include <imgui.h>
+
+//反発係数
+const float kCOR = 1.0f;
 
 void PlayScene::Initialize (Keyboard* keyboard) {
 	keyboard_ = keyboard;
@@ -14,20 +18,27 @@ void PlayScene::Initialize (Keyboard* keyboard) {
 		{640.0f, 720.0f},
 		{1280.0f, 500.0f},
 	};
+	collisionResult_ = {};
 }
 
 void PlayScene::Update () {
 	player_->Input ();
-	
-	for (int i = 0; i < 2; i++) {
-		if (isCollision (player_->GetPositon (), player_->GetRadius (), ground[i])) {
-			//めり込みを直す
-
-			player_->SetPosition ({ 640.0f, 100.0f });
-		}
-	}
 	player_->SpeedCalculation ();
 	player_->Update ();
+	for (int i = 0; i < 2; i++) {
+		//当たり判定
+		collisionResult_ = isCollision (player_->GetPositon (), player_->GetRadius (), ground[i]);
+		if (collisionResult_.isColliding) {
+			//めり込みを直す
+			player_->SetPosition (player_->GetPositon () + (collisionResult_.penetration * collisionResult_.normal));
+			//反射させる
+			Vector2<float> reflect = Reflect (player_->GetVelocity (), collisionResult_.normal);
+
+			//プレイヤーの速度に掛ける
+			player_->SetVelocity (reflect);
+		}
+	}
+	ImGui::Text ("normal x:%f y:%f", collisionResult_.normal.x, collisionResult_.normal.y);
 }
 
 void PlayScene::Draw () {
