@@ -4,7 +4,7 @@
 #include <imgui.h>
 
 //反発係数
-const float kCOR = 0.95f;
+const float kCOR = 0.70f;
 
 void PlayScene::Initialize (Keyboard* keyboard) {
 	keyboard_ = keyboard;
