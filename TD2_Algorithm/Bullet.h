@@ -7,6 +7,7 @@ public:
 
 	void JudgeScreen ();
 	void SpeedCalculation ();
+	void Recover ();
 	void Update ();
 
 	void Draw () override;
@@ -24,6 +25,7 @@ public:
 	bool GetArea () { return area_; }
 	bool GetWallTouch () { return wallTouch_; }
 	void SetWallTouch () { wallTouch_ = false; }
+	int GetRecoverTime () { return recoverTime_; }
 
 private:
 	bool isActive_;
@@ -31,5 +33,7 @@ private:
 	Vector2<float> reflect_;
 	//壁に触ったか
 	bool wallTouch_;
+	//回収タイマー
+	int recoverTime_;
 };
 

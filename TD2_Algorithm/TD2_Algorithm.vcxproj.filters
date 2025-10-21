@@ -26,6 +26,9 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{ee38b256-fa87-432b-bcc6-945fa2595cbd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Enemy">
+      <UniqueIdentifier>{95ddf334-5a25-46e2-a5d3-3c9b949e0e8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -55,6 +58,9 @@
     </ClCompile>
     <ClCompile Include="function.cpp">
       <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +174,9 @@
     </ClInclude>
     <ClInclude Include="function.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

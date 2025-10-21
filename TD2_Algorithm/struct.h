@@ -7,6 +7,11 @@ struct Vector2 {
 	t y;
 };
 
+struct Circle {
+	Vector2<float> pos;
+	Vector2<float> radius;
+};
+
 struct Segment {
 	Vector2<float> origin;	//始点
 	Vector2<float> diff;	//終点への差分ベクトル

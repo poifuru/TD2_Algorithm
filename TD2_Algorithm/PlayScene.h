@@ -6,7 +6,9 @@
 class PlayScene : public Scene {
 public:
 	void Initialize(Keyboard* keyboard) override;
-
+	
+	void Reflection ();
+	void BulletRecovery ();
 	void Update() override;
 	void Draw() override;
 
@@ -17,6 +19,10 @@ private:
 	Segment ground[2];
 	CollisionResult p_result_[2];
 	CollisionResult b_result_[2];
-	//反射させる
-	Vector2<float> reflect_;
+
+	//弾の回収部分
+	Circle circle_;
+	//弾とサークルの距離
+	Vector2<float> vec_[10];
+	float dis_[10];
 };

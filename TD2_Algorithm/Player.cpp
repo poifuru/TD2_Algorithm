@@ -24,6 +24,7 @@ void Player::Initialize (Keyboard* keyboard) {
 	cosf_ = 0.0f;
 	reflect_ = { 0.0f, 0.0f };
 	wallTouch_ = false;
+	bulletNum_ = 10;
 
 	for (auto& b : bullet) {
 		b.Initialize (pos_, sinf_, cosf_);
@@ -31,7 +32,7 @@ void Player::Initialize (Keyboard* keyboard) {
 }
 
 void Player::Jump () {
-	if (keyboard_->IsTrigger (DIK_SPACE)) {
+	if (keyboard_->IsTrigger (DIK_SPACE) && bulletNum_ > 0) {
 		if (pos_.x <= 250.0f) {
 			velocity_.x = 4.0f;
 			velocity_.y = 6.0f;
@@ -65,11 +66,12 @@ void Player::Rotate () {
 }
 
 void Player::Fire () {
-	if (keyboard_->IsTrigger (DIK_SPACE)) {
+	if (keyboard_->IsTrigger (DIK_SPACE) && bulletNum_ > 0) {
 		for (auto& b : bullet) {
 			if (!b.GetIsActive ()) {
 				b.Initialize (pos_, sinf (rad_), cosf (rad_));
 				b.SetIsActive ();
+				bulletNum_--;
 				break;
 			}
 		}
@@ -103,11 +105,20 @@ void Player::Update () {
 	if (pos_.x - radius_.x - velocity_.x <= 0.0f) {
 		pos_.x = pos_.x + kPos;
 	}
+	if (pos_.x + radius_.x + velocity_.x >= 500.0f) {
+		pos_.x = pos_.x - kPos;
+	}
 
 	//大砲
 	Rotate ();
+
+	//弾
 	for (auto& b : bullet) {
 		b.Update ();
+		if (b.GetIsActive() && b.GetRecoverTime () == 0) {
+			bulletNum_++;
+			break;
+		}
 	}
 }
 

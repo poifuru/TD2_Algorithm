@@ -22,13 +22,17 @@ void PlayScene::Initialize (Keyboard* keyboard) {
 		p_result_[i] = {};
 		b_result_[i] = {};
 	}
+	circle_ = {
+		{250.0f, 700.0f},
+		{30.0f, 30.0f},
+	};
+	for (int i = 0; i < 10; i++) {
+		vec_[i] = {};
+		dis_[i] = {};
+	}
 }
 
-void PlayScene::Update () {
-	player_->Input ();
-	player_->SpeedCalculation ();
-	player_->Update ();
-
+void PlayScene::Reflection () {
 	//画面のどっちにいるかの一時フラグ
 	bool area = false;
 
@@ -46,7 +50,7 @@ void PlayScene::Update () {
 			//めり込みを直す
 			player_->SetPosition (player_->GetPositon () + (p_result_[i].penetration * p_result_[i].normal));
 			//反射ベクトル更新
-			player_->SetReflect(Reflect (player_->GetVelocity (), p_result_[i].normal));
+			player_->SetReflect (Reflect (player_->GetVelocity (), p_result_[i].normal));
 
 			//反射ベクトルをxだけ反転させるように一時的に宣言
 			Vector2<float> reflect = player_->GetReflect ();
@@ -61,7 +65,6 @@ void PlayScene::Update () {
 				}
 				else if (player_->GetVelocity ().x < 0.0f) {
 					reflect.x *= -1.0f;
-					
 				}
 			}
 			if (area) { // 右側
@@ -74,14 +77,13 @@ void PlayScene::Update () {
 				}
 				else if (player_->GetVelocity ().x > 0.0f) {
 					reflect.x *= -1.0f;
-					
 				}
 			}
 			player_->SetWallTouch ();
 			//プレイヤーの速度に掛ける
 			player_->SetVelocity (reflect * kCOR);
 		}
-		ImGui::Text ("wallTouch %d", player_->GetWallTouch());
+		ImGui::Text ("wallTouch %d", player_->GetWallTouch ());
 
 		//弾と地面の当たり判定
 		for (auto& b : player_->GetBullet ()) {
@@ -95,7 +97,11 @@ void PlayScene::Update () {
 				//一時的な反射ベクトル
 				Vector2<float> reflect = b.GetReflect ();
 
-				if (!b.GetArea()) { // 左側
+				if (!b.GetArea ()) { // 左側
+					if (b.GetVelocity ().x > 0.0f && b.GetWallTouch ()) {
+						reflect.x = std::abs (reflect.x);
+						reflect.x += 4.0f;
+					}
 					if (b.GetVelocity ().x > 0.0f) {
 						reflect.x = std::abs (reflect.x);
 					}
@@ -104,6 +110,10 @@ void PlayScene::Update () {
 					}
 				}
 				if (b.GetArea ()) { // 右側
+					if (b.GetVelocity ().x < 0.0f && b.GetWallTouch ()) {
+						reflect.x = -std::abs (reflect.x);
+						reflect.x -= 4.0f;
+					}
 					if (b.GetVelocity ().x < 0.0f) {
 						reflect.x = -std::abs (reflect.x);
 					}
@@ -118,7 +128,37 @@ void PlayScene::Update () {
 	}
 }
 
+void PlayScene::BulletRecovery () {
+	int i = 0;
+	for (auto& b : player_->GetBullet ()) {
+		//サークルから弾の差分ベクトルを出して距離にする
+		vec_[i] = { circle_.pos - b.GetPositon () };
+		dis_[i] = { Length (vec_[i]) };
+		ImGui::Text ("dis[%d] : %f", i, dis_[i]);
+
+		//弾の速度が0且つサークルに当たってたら
+        if (dis_[i] <= circle_.radius.y && b.GetVelocity ().x <= 0.02f && b.GetVelocity().y <= 0.02f) {
+			b.Recover ();
+			//ImGui::Text ("hit!");
+		}
+		i++;
+	}
+}
+
+void PlayScene::Update () {
+	player_->Input ();
+	player_->SpeedCalculation ();
+	player_->Update ();
+	BulletRecovery ();
+
+	Reflection ();
+	ImGui::Text ("bulletNum : %d", player_->GetBulletNum ());
+}
+
 void PlayScene::Draw () {
+	//回収部分
+	Shape::DrawEllipse (circle_.pos.x, circle_.pos.y, circle_.radius.x, circle_.radius.y, 0.0f,
+						BLUE, kFillModeSolid);
 	player_->Draw ();
 
 	//地面

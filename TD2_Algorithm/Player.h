@@ -27,6 +27,8 @@ public:
 	void SetReflect (Vector2<float> velocity) { reflect_ = velocity; }
 	bool GetWallTouch () { return wallTouch_; }
 	void SetWallTouch () { wallTouch_ = false; }
+	int GetBulletNum () { return bulletNum_; }
+	void SetBulletNum () { bulletNum_++; }
 	//弾
 	std::array<Bullet, 10>& GetBullet () { return bullet; }
 
@@ -45,6 +47,8 @@ private:
 	Vector2<float> reflect_;
 	//壁に触ったか
 	bool wallTouch_;
+	//残弾数
+	int bulletNum_;
 
 	//弾
 	std::array<Bullet, 10> bullet;

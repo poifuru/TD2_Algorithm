@@ -11,6 +11,7 @@ void Bullet::Initialize (Vector2<float> pos, float sin, float cos) {
 	radius_ = { 10.0f, 10.0f };
 	velocity_ = { sin * 10.0f, cos * 10.0f }; // 発射方向に速度を設定
 	isActive_ = false;
+	recoverTime_ = 60;
 }
 
 void Bullet::JudgeScreen () {
@@ -31,6 +32,16 @@ void Bullet::SpeedCalculation () {
 	}
 
 	velocity_.y += kGravity * deltaTime;
+}
+
+void Bullet::Recover () {
+	if (recoverTime_ >= 0) {
+		recoverTime_--;
+
+		if (recoverTime_ < 0) {
+			isActive_ = false;
+		}
+	}
 }
 
 void Bullet::Update () {
