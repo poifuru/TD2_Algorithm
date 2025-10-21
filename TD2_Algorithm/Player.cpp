@@ -3,7 +3,7 @@
 #include "Shape.h"
 #include <cmath>
 
-const float kGravity = -9.8f;
+const float kGravity = -8.5f;
 const float kMaxFallSpeed = 20.0f;
 const float deltaTime = 1.0f / 60.0f;
 //めり込み防止用の定数
@@ -16,7 +16,7 @@ void Player::Initialize (Keyboard* keyboard) {
 	velocity_ = {-1.0f, 0.0f};
 
 	cannonPos_ = { pos_.x, pos_.y - radius_.y };
-	cannonRadius_ = { 12.0f, 24.0f };
+	cannonRadius_ = { 15.0f, 24.0f };
 	cannonOffset_ = { 0.0f, -30.0f };
 	angle_ = 0.0f;
 	rad_ = 0.0f;
@@ -123,6 +123,10 @@ void Player::Update () {
 }
 
 void Player::Draw () {
+	//弾
+	for (auto& b : bullet) {
+		b.Draw ();
+	}
 	//player
 	Shape::DrawEllipse (pos_.x, pos_.y, radius_.x, radius_.y, 0.0f, WHITE, kFillModeSolid);
 	//cannon
@@ -150,9 +154,4 @@ void Player::Draw () {
 		local[3].x, local[3].y,
 		0, 0, 0, 0, 0, BLACK
 	);
-
-	//弾
-	for (auto& b : bullet) {
-		b.Draw ();
-	}
 }

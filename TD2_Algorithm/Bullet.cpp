@@ -1,14 +1,14 @@
 #include "Bullet.h"
 #include "Shape.h"
 
-const float kGravity = -9.8f;
+const float kGravity = -8.5f;
 const float deltaTime = 1.0f / 60.0f;
 //めり込み防止用の定数
 const float kPos = 3.0f;
 
 void Bullet::Initialize (Vector2<float> pos, float sin, float cos) {
 	pos_ = pos;
-	radius_ = { 10.0f, 10.0f };
+	radius_ = { 12.5f, 12.5f };
 	velocity_ = { sin * 10.0f, cos * 10.0f }; // 発射方向に速度を設定
 	isActive_ = false;
 	recoverTime_ = 60;

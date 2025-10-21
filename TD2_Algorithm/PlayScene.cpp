@@ -139,7 +139,6 @@ void PlayScene::BulletRecovery () {
 		//弾の速度が0且つサークルに当たってたら
         if (dis_[i] <= circle_.radius.y && b.GetVelocity ().x <= 0.02f && b.GetVelocity().y <= 0.02f) {
 			b.Recover ();
-			//ImGui::Text ("hit!");
 		}
 		i++;
 	}
