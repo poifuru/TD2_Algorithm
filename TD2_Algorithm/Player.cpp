@@ -6,6 +6,8 @@
 const float kGravity = -9.8f;
 const float kMaxFallSpeed = 20.0f;
 const float deltaTime = 1.0f / 60.0f;
+//めり込み防止用の定数
+const float kPos = 3.0f;
 
 void Player::Initialize (Keyboard* keyboard) {
 	keyboard_ = keyboard;
@@ -20,6 +22,8 @@ void Player::Initialize (Keyboard* keyboard) {
 	rad_ = 0.0f;
 	sinf_ = 0.0f;
 	cosf_ = 0.0f;
+	reflect_ = { 0.0f, 0.0f };
+	wallTouch_ = false;
 
 	for (auto& b : bullet) {
 		b.Initialize (pos_, sinf_, cosf_);
@@ -64,7 +68,7 @@ void Player::Fire () {
 	if (keyboard_->IsTrigger (DIK_SPACE)) {
 		for (auto& b : bullet) {
 			if (!b.GetIsActive ()) {
-				b.Initialize (cannonPos_, sinf (rad_), cosf (rad_));
+				b.Initialize (pos_, sinf (rad_), cosf (rad_));
 				b.SetIsActive ();
 				break;
 			}
@@ -74,6 +78,7 @@ void Player::Fire () {
 
 void Player::SpeedCalculation () {
 	if (pos_.x - radius_.x <= 0.0f || pos_.x + radius_.x >= 500.0f) {
+		wallTouch_ = true;
 		velocity_.x *= -1.0f;
 	}
 	if (pos_.y - radius_.y <= 0.0f) {
@@ -93,6 +98,12 @@ void Player::Update () {
 	//座標更新
 	pos_.x += velocity_.x;
 	pos_.y -= velocity_.y;
+
+	//壁へのめり込み予防
+	if (pos_.x - radius_.x - velocity_.x <= 0.0f) {
+		pos_.x = pos_.x + kPos;
+	}
+
 	//大砲
 	Rotate ();
 	for (auto& b : bullet) {

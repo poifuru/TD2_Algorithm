@@ -23,6 +23,12 @@ public:
 	Vector2<float> GetRadius () { return radius_; }
 	Vector2<float> GetVelocity () { return velocity_; }
 	void SetVelocity (Vector2<float> velocity) { velocity_ = velocity; }
+	Vector2<float> GetReflect () { return reflect_; }
+	void SetReflect (Vector2<float> velocity) { reflect_ = velocity; }
+	bool GetWallTouch () { return wallTouch_; }
+	void SetWallTouch () { wallTouch_ = false; }
+	//弾
+	std::array<Bullet, 10>& GetBullet () { return bullet; }
 
 private:
 	//砲台の変数
@@ -35,6 +41,10 @@ private:
 	float sinf_;
 	float cosf_;
 	Vector2<float> newPos_;
+	//反射ベクトル
+	Vector2<float> reflect_;
+	//壁に触ったか
+	bool wallTouch_;
 
 	//弾
 	std::array<Bullet, 10> bullet;

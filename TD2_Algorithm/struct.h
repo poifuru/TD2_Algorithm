@@ -8,7 +8,7 @@ struct Vector2 {
 };
 
 struct Segment {
-	Vector2<float> origin; //始点
+	Vector2<float> origin;	//始点
 	Vector2<float> diff;	//終点への差分ベクトル
 };
 
