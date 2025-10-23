@@ -5,11 +5,17 @@
 
 //反発係数
 const float kCOR = 0.80f;
+const float deltaTime = 1.0f / 60.0f;
+
+//敵の生成間隔の最小値、最大値
+const float kMinSpawnTime = 1.0f;
+const float kMaxSpawnTime = 5.0f;
 
 void PlayScene::Initialize (Keyboard* keyboard) {
 	keyboard_ = keyboard;
 	player_ = std::make_unique<Player> ();
 	player_->Initialize (keyboard_);
+	e_Manager_ = std::make_unique<EnemyManager> ();
 	ground[0] = {
 		{0.0f, 650.0f},
 		{250.0f, 700.0f},
@@ -32,8 +38,17 @@ void PlayScene::Initialize (Keyboard* keyboard) {
 		dis_[i] = {};
 	}
 
-	enemy_ = std::make_unique<Enemy> ();
-	enemy_->Initialize (400.0f, circle_.pos);
+	//乱数生成機
+	// 実行ごとに異なるシード値を取得するでやんす
+	std::random_device rd;
+	// std::mt19937 エンジンのインスタンスを作成し、rd()の結果で初期化するでやんす
+	engine_.seed (rd ());
+	//分布の初期化
+	enemy_x_ = std::uniform_real_distribution<float> (25.0f, 475.0f);
+	spawnTime_ = std::uniform_real_distribution<float> (kMinSpawnTime, kMaxSpawnTime);
+
+	ingameTimer_ = 0.0f;
+	time_ = spawnTime_ (engine_);
 }
 
 void PlayScene::Reflection () {
@@ -137,9 +152,9 @@ void PlayScene::BulletRecovery () {
 		//サークルから弾の差分ベクトルを出して距離にする
 		vec_[i] = { circle_.pos - b.GetPositon () };
 		dis_[i] = { Length (vec_[i]) };
-		
+
 		//弾の速度が0且つサークルに当たってたら
-        if (dis_[i] <= circle_.radius.y && b.GetVelocity ().x <= 0.02f && b.GetVelocity().y <= 0.02f) {
+		if (dis_[i] <= circle_.radius.y && b.GetVelocity ().x <= 0.02f && b.GetVelocity ().y <= 0.02f) {
 			b.Recover ();
 		}
 		i++;
@@ -154,28 +169,47 @@ void PlayScene::Update () {
 
 	Reflection ();
 
-	//敵の更新処理
-	enemy_->Update ();
-	//敵とコア
-	if (enemy_->GetIsAlive() && enemy_->IsCollision (circle_.pos, circle_.radius.x)) {
-		coreHp_--;
-		enemy_->SetIsAlive ();
+	//時間のカウント
+	ingameTimer_ += deltaTime;
+
+	if (ingameTimer_ >= time_) {
+		//敵を生成する	
+		e_Manager_->Spawn (enemy_x_ (engine_), circle_.pos);
+
+		//経過時間から今回スポーンにかかった時間を減算
+		ingameTimer_ -= time_;
+
+		time_ = spawnTime_ (engine_);
 	}
 
-	//敵と弾
-	for (auto& b : player_->GetBullet ()) {
-		if (enemy_->IsCollision (b.GetPositon (), b.GetRadius ().x)) {
-			enemy_->SetIsAlive ();
+	//敵の更新処理
+	for (auto& e : e_Manager_->GetEnemies ()) {
+		e.Update ();
+
+		//敵とコア
+		if (e.IsCollision (circle_.pos, circle_.radius.x)) {
+			if (e.GetIsAlive ())
+				coreHp_--;
+			e.SetIsAlive ();
+		}
+
+		//敵と弾
+		for (auto& b : player_->GetBullet ())
+			if (e.IsCollision (b.GetPositon (), b.GetRadius ().x)) {
+				e.SetIsAlive ();
+			}
+
+		//敵とプレイヤー
+		if (e.IsCollision (player_->GetPositon (), player_->GetRadius ().x)) {
+			e.SetIsAlive ();
 		}
 	}
 
-	//敵とプレイヤー
-	if (enemy_->IsCollision (player_->GetPositon (), player_->GetRadius ().x)) {
-		enemy_->SetIsAlive ();
-	}
+	e_Manager_->EraseEnemy ();
 
 	ImGui::Text ("coreHp %d", coreHp_);
 	ImGui::Text ("bulletNum : %d", player_->GetBulletNum ());
+	ImGui::Text ("enemyNum : %d", e_Manager_->GetEnemies ().size ());
 }
 
 void PlayScene::Draw () {
@@ -183,7 +217,9 @@ void PlayScene::Draw () {
 	Shape::DrawEllipse (circle_.pos.x, circle_.pos.y, circle_.radius.x, circle_.radius.y, 0.0f,
 						BLUE, kFillModeSolid);
 	player_->Draw ();
-	enemy_->Draw ();
+	for (auto& e : e_Manager_->GetEnemies ()) {
+		e.Draw ();
+	}
 
 	//地面
 	Shape::DrawLine (ground[0].origin.x, ground[0].origin.y, ground[0].diff.x, ground[0].diff.y, BLACK);

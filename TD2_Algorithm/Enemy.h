@@ -30,6 +30,9 @@ public:
 
 	bool GetIsAlive () { return isAlive_; }
 	void SetIsAlive () { isAlive_ = false; }
+	Vector2<float> GetPosition () { return pos_; }
+	Vector2<float> GetRadius () { return radius_; }
+	Vector2<float> GetDiff () { return diff_; }
 
 private:
 	//敵の情報
@@ -40,5 +43,7 @@ private:
 	Vector2<float> diff_;
 	//diffを正規化した方向ベクトル
 	Vector2<float> normal_;
+	//目標までの距離
+	float dis_;
 };
 
