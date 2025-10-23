@@ -2,6 +2,7 @@
 #include <Novice.h>
 #include "Shape.h"
 #include <cmath>
+#include <imgui.h>
 
 const float kGravity = -8.5f;
 const float kMaxFallSpeed = 20.0f;
@@ -129,13 +130,12 @@ void Player::Update () {
 
 	//大砲
 	Rotate ();
-
 	//弾
 	for (auto& b : bullet) {
 		b.Update ();
-		if (b.GetIsActive() && b.GetRecoverTime () == 0) {
+		if (b.IsRecovered()) {
 			bulletNum_++;
-			break;
+			ImGui::Text ("IsRecovered");
 		}
 	}
 }

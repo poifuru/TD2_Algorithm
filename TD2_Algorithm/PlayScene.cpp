@@ -154,24 +154,15 @@ void PlayScene::BulletRecovery () {
 		dis_[i] = { Length (vec_[i]) };
 
 		//弾の速度が0且つサークルに当たってたら
-		if (dis_[i] <= circle_.radius.y && b.GetVelocity ().x <= 0.02f && b.GetVelocity ().y <= 0.02f) {
+		if (b.GetIsActive () && dis_[i] <= circle_.radius.y + b.GetRadius ().y && b.GetVelocity ().x <= 0.01f && b.GetVelocity ().y <= 0.01f) {
 			b.Recover ();
 		}
+
 		i++;
 	}
 }
 
-void PlayScene::Update () {
-	player_->Input ();
-	player_->SpeedCalculation ();
-	player_->Update ();
-	BulletRecovery ();
-
-	Reflection ();
-
-	//時間のカウント
-	ingameTimer_ += deltaTime;
-
+void PlayScene::EnemyProcess () {
 	if (ingameTimer_ >= time_) {
 		//敵を生成する	
 		e_Manager_->Spawn (enemy_x_ (engine_), circle_.pos);
@@ -206,6 +197,17 @@ void PlayScene::Update () {
 	}
 
 	e_Manager_->EraseEnemy ();
+}
+
+void PlayScene::Update () {
+	//時間のカウント
+	ingameTimer_ += deltaTime;
+	player_->Input ();
+	player_->SpeedCalculation ();
+	player_->Update ();
+	BulletRecovery ();
+	Reflection ();
+	EnemyProcess ();
 
 	ImGui::Text ("coreHp %d", coreHp_);
 	ImGui::Text ("bulletNum : %d", player_->GetBulletNum ());
@@ -213,6 +215,11 @@ void PlayScene::Update () {
 }
 
 void PlayScene::Draw () {
+	//倍率ゾーン
+	Shape::DrawEllipse (circle_.pos.x, circle_.pos.y, 750.0f, 750.0f, 0.0f, 0xffff00ff, kFillModeSolid);
+	Shape::DrawEllipse (circle_.pos.x, circle_.pos.y, 583.2f, 583.2f, 0.0f, 0xbbbb00ff, kFillModeSolid);
+	Shape::DrawEllipse (circle_.pos.x, circle_.pos.y, 316.6f, 316.6f, 0.0f, 0x888800ff, kFillModeSolid);
+
 	//回収部分
 	Shape::DrawEllipse (circle_.pos.x, circle_.pos.y, circle_.radius.x, circle_.radius.y, 0.0f,
 						BLUE, kFillModeSolid);

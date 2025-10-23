@@ -13,6 +13,7 @@ public:
 	
 	void Reflection ();
 	void BulletRecovery ();
+	void EnemyProcess ();
 	void Update() override;
 	void Draw() override;
 

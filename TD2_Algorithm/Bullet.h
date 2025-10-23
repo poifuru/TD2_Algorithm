@@ -26,6 +26,8 @@ public:
 	bool GetWallTouch () { return wallTouch_; }
 	void SetWallTouch () { wallTouch_ = false; }
 	int GetRecoverTime () { return recoverTime_; }
+	//回収完了を知らせる関数
+	bool IsRecovered () { return recoverTime_ == -1; }
 
 private:
 	bool isActive_;

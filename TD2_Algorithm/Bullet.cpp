@@ -40,6 +40,7 @@ void Bullet::Recover () {
 
 		if (recoverTime_ < 0) {
 			isActive_ = false;
+			recoverTime_ = -2;
 		}
 	}
 }
