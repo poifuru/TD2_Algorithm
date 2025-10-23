@@ -8,15 +8,17 @@ const float kMaxFallSpeed = 20.0f;
 const float deltaTime = 1.0f / 60.0f;
 //めり込み防止用の定数
 const float kPos = 3.0f;
+//bulletNumの上限
+const int kMaxBullet = 10;
 
 void Player::Initialize (Keyboard* keyboard) {
 	keyboard_ = keyboard;
 	pos_ = { 100.0f, 400.0f };
-	radius_ = { 30.0f, 30.0f };
+	radius_ = { 40.0f, 40.0f };
 	velocity_ = {-1.0f, 0.0f};
 
 	cannonPos_ = { pos_.x, pos_.y - radius_.y };
-	cannonRadius_ = { 15.0f, 24.0f };
+	cannonRadius_ = { 18.0f, 30.0f };
 	cannonOffset_ = { 0.0f, -30.0f };
 	angle_ = 0.0f;
 	rad_ = 0.0f;
@@ -25,6 +27,8 @@ void Player::Initialize (Keyboard* keyboard) {
 	reflect_ = { 0.0f, 0.0f };
 	wallTouch_ = false;
 	bulletNum_ = 10;
+	isStan_ = false;
+	stanTime_ = 60;
 
 	for (auto& b : bullet) {
 		b.Initialize (pos_, sinf_, cosf_);
@@ -93,10 +97,24 @@ void Player::SpeedCalculation () {
 void Player::Input () {
 	Jump ();
 	Fire ();
+}
 
+bool Player::Stan () {
+	isStan_ = true;
+
+	if (isStan_) {
+		stanTime_--;
+	}
+
+	return isStan_;
 }
 
 void Player::Update () {
+	//bulletNumの上限
+	if (bulletNum_ >= kMaxBullet) {
+		bulletNum_ = kMaxBullet;
+	}
+	
 	//座標更新
 	pos_.x += velocity_.x;
 	pos_.y -= velocity_.y;

@@ -26,10 +26,14 @@ void PlayScene::Initialize (Keyboard* keyboard) {
 		{250.0f, 700.0f},
 		{30.0f, 30.0f},
 	};
+	coreHp_ = 3;
 	for (int i = 0; i < 10; i++) {
 		vec_[i] = {};
 		dis_[i] = {};
 	}
+
+	enemy_ = std::make_unique<Enemy> ();
+	enemy_->Initialize (400.0f, circle_.pos);
 }
 
 void PlayScene::Reflection () {
@@ -83,7 +87,6 @@ void PlayScene::Reflection () {
 			//プレイヤーの速度に掛ける
 			player_->SetVelocity (reflect * kCOR);
 		}
-		ImGui::Text ("wallTouch %d", player_->GetWallTouch ());
 
 		//弾と地面の当たり判定
 		for (auto& b : player_->GetBullet ()) {
@@ -134,8 +137,7 @@ void PlayScene::BulletRecovery () {
 		//サークルから弾の差分ベクトルを出して距離にする
 		vec_[i] = { circle_.pos - b.GetPositon () };
 		dis_[i] = { Length (vec_[i]) };
-		ImGui::Text ("dis[%d] : %f", i, dis_[i]);
-
+		
 		//弾の速度が0且つサークルに当たってたら
         if (dis_[i] <= circle_.radius.y && b.GetVelocity ().x <= 0.02f && b.GetVelocity().y <= 0.02f) {
 			b.Recover ();
@@ -151,6 +153,28 @@ void PlayScene::Update () {
 	BulletRecovery ();
 
 	Reflection ();
+
+	//敵の更新処理
+	enemy_->Update ();
+	//敵とコア
+	if (enemy_->GetIsAlive() && enemy_->IsCollision (circle_.pos, circle_.radius.x)) {
+		coreHp_--;
+		enemy_->SetIsAlive ();
+	}
+
+	//敵と弾
+	for (auto& b : player_->GetBullet ()) {
+		if (enemy_->IsCollision (b.GetPositon (), b.GetRadius ().x)) {
+			enemy_->SetIsAlive ();
+		}
+	}
+
+	//敵とプレイヤー
+	if (enemy_->IsCollision (player_->GetPositon (), player_->GetRadius ().x)) {
+		enemy_->SetIsAlive ();
+	}
+
+	ImGui::Text ("coreHp %d", coreHp_);
 	ImGui::Text ("bulletNum : %d", player_->GetBulletNum ());
 }
 
@@ -159,6 +183,7 @@ void PlayScene::Draw () {
 	Shape::DrawEllipse (circle_.pos.x, circle_.pos.y, circle_.radius.x, circle_.radius.y, 0.0f,
 						BLUE, kFillModeSolid);
 	player_->Draw ();
+	enemy_->Draw ();
 
 	//地面
 	Shape::DrawLine (ground[0].origin.x, ground[0].origin.y, ground[0].diff.x, ground[0].diff.y, BLACK);

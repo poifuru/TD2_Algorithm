@@ -14,6 +14,7 @@ public:
 	void Fire ();
 	void SpeedCalculation ();
 	void Input ();
+	bool Stan ();
 	void Update ();
 	void Draw () override;
 
@@ -49,6 +50,9 @@ private:
 	bool wallTouch_;
 	//残弾数
 	int bulletNum_;
+	//スタン
+	bool isStan_;
+	int stanTime_;
 
 	//弾
 	std::array<Bullet, 10> bullet;

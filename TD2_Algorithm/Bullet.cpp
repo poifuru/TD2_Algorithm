@@ -8,7 +8,7 @@ const float kPos = 3.0f;
 
 void Bullet::Initialize (Vector2<float> pos, float sin, float cos) {
 	pos_ = pos;
-	radius_ = { 12.5f, 12.5f };
+	radius_ = { 15.0f, 15.0f };
 	velocity_ = { sin * 10.0f, cos * 10.0f }; // 発射方向に速度を設定
 	isActive_ = false;
 	recoverTime_ = 60;
