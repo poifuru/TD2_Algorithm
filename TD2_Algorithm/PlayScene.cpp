@@ -30,7 +30,7 @@ void PlayScene::Initialize (Keyboard* keyboard) {
 	}
 	circle_ = {
 		{250.0f, 700.0f},
-		{30.0f, 30.0f},
+		{90.0f, 90.0f},
 	};
 	coreHp_ = 3;
 	for (int i = 0; i < 10; i++) {
@@ -39,9 +39,9 @@ void PlayScene::Initialize (Keyboard* keyboard) {
 	}
 
 	//乱数生成機
-	// 実行ごとに異なるシード値を取得するでやんす
+	// 実行ごとに異なるシード値を取得する
 	std::random_device rd;
-	// std::mt19937 エンジンのインスタンスを作成し、rd()の結果で初期化するでやんす
+	// std::mt19937 エンジンのインスタンスを作成し、rd()の結果で初期化する
 	engine_.seed (rd ());
 	//分布の初期化
 	enemy_x_ = std::uniform_real_distribution<float> (25.0f, 475.0f);
@@ -154,7 +154,7 @@ void PlayScene::BulletRecovery () {
 		dis_[i] = { Length (vec_[i]) };
 
 		//弾の速度が0且つサークルに当たってたら
-		if (b.GetIsActive () && dis_[i] <= circle_.radius.y + b.GetRadius ().y && b.GetVelocity ().x <= 0.01f && b.GetVelocity ().y <= 0.01f) {
+		if (b.GetIsActive () && dis_[i] <= circle_.radius.y + b.GetRadius ().y && b.GetVelocity ().x <= 0.00f && b.GetVelocity ().y <= 0.00f) {
 			b.Recover ();
 		}
 

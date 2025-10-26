@@ -1,5 +1,6 @@
 #include "Bullet.h"
 #include "Shape.h"
+#include "imgui.h"
 
 const float kGravity = -8.5f;
 const float deltaTime = 1.0f / 60.0f;
@@ -37,10 +38,10 @@ void Bullet::SpeedCalculation () {
 void Bullet::Recover () {
 	if (recoverTime_ >= 0) {
 		recoverTime_--;
+		ImGui::Text ("recoverTime %d", recoverTime_);
 
-		if (recoverTime_ < 0) {
+		if (recoverTime_ == 0) {
 			isActive_ = false;
-			recoverTime_ = -2;
 		}
 	}
 }
