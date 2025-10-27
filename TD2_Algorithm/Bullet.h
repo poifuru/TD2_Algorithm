@@ -8,6 +8,7 @@ public:
 	void JudgeScreen ();
 	void SpeedCalculation ();
 	void Recover ();
+	void Collect ();
 	void Update ();
 
 	void Draw () override;

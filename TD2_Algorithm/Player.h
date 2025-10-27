@@ -4,7 +4,7 @@
 #include <array>
 #include "Keyboard.h"
 
-class Player :	public Obj {
+class Player : public Obj {
 public:
 	void Initialize (Keyboard* keyboard);
 
@@ -15,6 +15,7 @@ public:
 	void SpeedCalculation ();
 	void Input ();
 	void Stan ();
+	void disCalculation (Vector2<float> pos);
 	void Update ();
 	void Draw () override;
 
@@ -31,12 +32,14 @@ public:
 	int GetBulletNum () { return bulletNum_; }
 	void SetBulletNum () { bulletNum_++; }
 	bool GetIsStan () { return isStan_; }
-	void SetIsStan () { 
+	void SetIsStan () {
 		stanTime_ = 60;
 		isStan_ = true;
 	}
+	float GetDisToCore () { return disToCore_; }
 	//弾
 	std::array<Bullet, 10>& GetBullet () { return bullet; }
+	void CollectBullet (int num);
 
 private:
 	//砲台の変数
@@ -58,6 +61,8 @@ private:
 	//スタン
 	bool isStan_;
 	int stanTime_;
+	//コアとの距離を常に取っておく
+	float disToCore_;
 
 	//弾
 	std::array<Bullet, 10> bullet;

@@ -188,6 +188,16 @@ void PlayScene::EnemyProcess () {
 		for (auto& b : player_->GetBullet ())
 			if (e.IsCollision (b.GetPositon (), b.GetRadius ().x)) {
 				e.SetIsAlive ();
+
+				if (player_->GetDisToCore () <= 316.6f) {
+					player_->CollectBullet (1);
+				}
+				else if (player_->GetDisToCore () <= 583.2f) {
+					player_->CollectBullet (2);
+				}
+				else if (player_->GetDisToCore () <= 750.0f) {
+					player_->CollectBullet (3);
+				}
 			}
 
 		//敵とプレイヤー
@@ -201,18 +211,21 @@ void PlayScene::EnemyProcess () {
 }
 
 void PlayScene::Update () {
+	ImGui::Text ("coreHp %d", coreHp_);
+	ImGui::Text ("bulletNum : %d", player_->GetBulletNum ());
+	ImGui::Text ("enemyNum : %d", e_Manager_->GetEnemies ().size ());
+	ImGui::Text ("playerToCore :%f", player_->GetDisToCore ());
 	//時間のカウント
 	ingameTimer_ += deltaTime;
 	player_->Input ();
 	player_->SpeedCalculation ();
+	player_->disCalculation (circle_.pos);
 	player_->Update ();
 	BulletRecovery ();
 	Reflection ();
 	EnemyProcess ();
 
-	ImGui::Text ("coreHp %d", coreHp_);
-	ImGui::Text ("bulletNum : %d", player_->GetBulletNum ());
-	ImGui::Text ("enemyNum : %d", e_Manager_->GetEnemies ().size ());
+	
 }
 
 void PlayScene::Draw () {

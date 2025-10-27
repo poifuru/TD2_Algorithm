@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <Novice.h>
 #include "Shape.h"
+#include "function.h"
 #include <cmath>
 #include <imgui.h>
 
@@ -30,6 +31,7 @@ void Player::Initialize (Keyboard* keyboard) {
 	bulletNum_ = 10;
 	isStan_ = false;
 	stanTime_ = 60;
+	disToCore_ = 0.0f;
 
 	for (auto& b : bullet) {
 		b.Initialize (pos_, sinf_, cosf_);
@@ -112,6 +114,11 @@ void Player::Stan () {
 	}
 }
 
+void Player::disCalculation (Vector2<float> pos) {
+	Vector2<float> vec = Subtract(pos, pos_);
+	disToCore_ = { Length (vec) };
+}
+
 void Player::Update () {
 	Stan ();
 	//bulletNumの上限
@@ -182,4 +189,22 @@ void Player::Draw () {
 		local[3].x, local[3].y,
 		0, 0, 0, 0, 0, BLACK
 	);
+}
+
+void Player::CollectBullet (int num) {
+	int collectedCount = 0;	
+
+	for (size_t i = 0; i < bullet.size (); ++i) {
+		//現在の弾
+		auto& b = bullet[i];
+
+		if (b.GetIsActive ()) {
+			b.Collect ();
+			collectedCount++;
+		}
+
+		if (collectedCount >= num) {
+			break;
+		}
+	}
 }

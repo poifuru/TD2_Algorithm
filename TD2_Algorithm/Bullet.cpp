@@ -41,6 +41,12 @@ void Bullet::Recover () {
 	}
 }
 
+void Bullet::Collect () {
+	if (isActive_) {
+		recoverTime_ = 0;
+	}
+}
+
 void Bullet::Update () {
 	if (isActive_) {
 		JudgeScreen ();
