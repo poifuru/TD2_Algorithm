@@ -154,7 +154,7 @@ void PlayScene::BulletRecovery () {
 		dis_[i] = { Length (vec_[i]) };
 
 		//弾の速度が0且つサークルに当たってたら
-		if (b.GetIsActive () && dis_[i] <= circle_.radius.y + b.GetRadius ().y && b.GetVelocity ().x <= 0.00f && b.GetVelocity ().y <= 0.00f) {
+		if (b.GetIsActive () && dis_[i] <= circle_.radius.y + b.GetRadius ().y && b.GetVelocity ().x <= 0.01f && b.GetVelocity ().y <= 0.01f) {
 			b.Recover ();
 		}
 

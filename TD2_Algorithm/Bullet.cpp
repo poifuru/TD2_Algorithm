@@ -38,11 +38,6 @@ void Bullet::SpeedCalculation () {
 void Bullet::Recover () {
 	if (recoverTime_ >= 0) {
 		recoverTime_--;
-		ImGui::Text ("recoverTime %d", recoverTime_);
-
-		if (recoverTime_ == 0) {
-			isActive_ = false;
-		}
 	}
 }
 
@@ -62,6 +57,7 @@ void Bullet::Update () {
 			pos_.x = pos_.x - kPos;
 		}
 	}
+	ImGui::Text ("recoverTime %d", recoverTime_);
 }
 
 void Bullet::Draw () {

@@ -21,13 +21,13 @@ public:
 	Vector2<float> GetReflect () { return reflect_; }
 	void SetReflect (Vector2<float> velocity) { reflect_ = velocity; }
 	bool GetIsActive () { return isActive_; }
-	void SetIsActive () { isActive_ = true; }
+	void SetIsActive (bool flag) { isActive_ = flag; }
 	bool GetArea () { return area_; }
 	bool GetWallTouch () { return wallTouch_; }
 	void SetWallTouch () { wallTouch_ = false; }
 	int GetRecoverTime () { return recoverTime_; }
 	//回収完了を知らせる関数
-	bool IsRecovered () { return recoverTime_ == -1; }
+	bool IsRecovered () { return recoverTime_ == 0 && isActive_ == true; }
 
 private:
 	bool isActive_;

@@ -21,7 +21,7 @@ void Player::Initialize (Keyboard* keyboard) {
 	cannonPos_ = { pos_.x, pos_.y - radius_.y };
 	cannonRadius_ = { 18.0f, 30.0f };
 	cannonOffset_ = { 0.0f, -30.0f };
-	angle_ = 0.0f;
+	angle_ = 45.0f;
 	rad_ = 0.0f;
 	sinf_ = 0.0f;
 	cosf_ = 0.0f;
@@ -75,7 +75,7 @@ void Player::Fire () {
 		for (auto& b : bullet) {
 			if (!b.GetIsActive ()) {
 				b.Initialize (pos_, sinf (rad_), cosf (rad_));
-				b.SetIsActive ();
+				b.SetIsActive (true);
 				bulletNum_--;
 				break;
 			}
@@ -134,19 +134,21 @@ void Player::Update () {
 	for (auto& b : bullet) {
 		b.Update ();
 		if (b.IsRecovered()) {
-			bulletNum_++;
-			ImGui::Text ("IsRecovered");
+			bulletNum_ += 1;
+			b.SetIsActive (false);
 		}
 	}
 }
 
 void Player::Draw () {
+	
+	//player
+	Shape::DrawEllipse (pos_.x, pos_.y, radius_.x, radius_.y, 0.0f, WHITE, kFillModeSolid);
+
 	//弾
 	for (auto& b : bullet) {
 		b.Draw ();
 	}
-	//player
-	Shape::DrawEllipse (pos_.x, pos_.y, radius_.x, radius_.y, 0.0f, WHITE, kFillModeSolid);
 	//cannon
 	// 回転行列を使って4点を回す
 	Vector2<float> local[4] = {
