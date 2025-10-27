@@ -22,7 +22,7 @@ void Player::Initialize (Keyboard* keyboard) {
 	cannonPos_ = { pos_.x, pos_.y - radius_.y };
 	cannonRadius_ = { 18.0f, 30.0f };
 	cannonOffset_ = { 0.0f, -30.0f };
-	angle_ = 45.0f;
+	angle_ = 0.0f;
 	rad_ = 0.0f;
 	sinf_ = 0.0f;
 	cosf_ = 0.0f;

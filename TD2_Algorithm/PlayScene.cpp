@@ -16,6 +16,8 @@ void PlayScene::Initialize (Keyboard* keyboard) {
 	player_ = std::make_unique<Player> ();
 	player_->Initialize (keyboard_);
 	e_Manager_ = std::make_unique<EnemyManager> ();
+	gameOver_ = false;
+
 	ground[0] = {
 		{0.0f, 650.0f},
 		{250.0f, 700.0f},
@@ -79,10 +81,10 @@ void PlayScene::Reflection () {
 					reflect.x = std::abs (reflect.x);
 					reflect.x += 4.0f;
 				}
-				else if (player_->GetVelocity ().x > 0.0f) {
+				else if (player_->GetVelocity ().x >= 0.0f) {
 					reflect.x = std::abs (reflect.x);
 				}
-				else if (player_->GetVelocity ().x < 0.0f) {
+				else if (player_->GetVelocity ().x <= 0.0f) {
 					reflect.x *= -1.0f;
 				}
 			}
@@ -91,10 +93,10 @@ void PlayScene::Reflection () {
 					reflect.x = -std::abs (reflect.x);
 					reflect.x -= 4.0f;
 				}
-				else if (player_->GetVelocity ().x < 0.0f) {
+				else if (player_->GetVelocity ().x <= 0.0f) {
 					reflect.x = -std::abs (reflect.x);
 				}
-				else if (player_->GetVelocity ().x > 0.0f) {
+				else if (player_->GetVelocity ().x >= 0.0f) {
 					reflect.x *= -1.0f;
 				}
 			}
@@ -120,10 +122,10 @@ void PlayScene::Reflection () {
 						reflect.x = std::abs (reflect.x);
 						reflect.x += 4.0f;
 					}
-					if (b.GetVelocity ().x > 0.0f) {
+					else if (b.GetVelocity ().x >= 0.0f) {
 						reflect.x = std::abs (reflect.x);
 					}
-					if (b.GetVelocity ().x < 0.0f) {
+					else if (b.GetVelocity ().x <= 0.0f) {
 						reflect.x *= -1.0f;
 					}
 				}
@@ -132,10 +134,10 @@ void PlayScene::Reflection () {
 						reflect.x = -std::abs (reflect.x);
 						reflect.x -= 4.0f;
 					}
-					if (b.GetVelocity ().x < 0.0f) {
+					else if (b.GetVelocity ().x <= 0.0f) {
 						reflect.x = -std::abs (reflect.x);
 					}
-					if (b.GetVelocity ().x > 0.0f) {
+					else if (b.GetVelocity ().x >= 0.0f) {
 						reflect.x *= -1.0f;
 					}
 				}
@@ -225,7 +227,9 @@ void PlayScene::Update () {
 	Reflection ();
 	EnemyProcess ();
 
-	
+	if (coreHp_ == 0) {
+		gameOver_ = true;
+	}
 }
 
 void PlayScene::Draw () {

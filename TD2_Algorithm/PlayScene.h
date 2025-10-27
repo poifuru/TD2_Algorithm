@@ -22,6 +22,9 @@ private:
 	//エネミーマネージャー
 	std::unique_ptr<EnemyManager> e_Manager_;
 
+	//ゲームオーバーフラグ
+	bool gameOver_;
+
 	//地面
 	Segment ground[2];
 	CollisionResult p_result_[2];
