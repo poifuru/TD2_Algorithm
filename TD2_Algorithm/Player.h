@@ -14,7 +14,7 @@ public:
 	void Fire ();
 	void SpeedCalculation ();
 	void Input ();
-	bool Stan ();
+	void Stan ();
 	void Update ();
 	void Draw () override;
 
@@ -30,6 +30,11 @@ public:
 	void SetWallTouch () { wallTouch_ = false; }
 	int GetBulletNum () { return bulletNum_; }
 	void SetBulletNum () { bulletNum_++; }
+	bool GetIsStan () { return isStan_; }
+	void SetIsStan () { 
+		stanTime_ = 60;
+		isStan_ = true;
+	}
 	//弾
 	std::array<Bullet, 10>& GetBullet () { return bullet; }
 

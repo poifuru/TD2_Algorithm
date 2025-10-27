@@ -96,21 +96,24 @@ void Player::SpeedCalculation () {
 }
 
 void Player::Input () {
-	Jump ();
-	Fire ();
+	if (!isStan_) {
+		Jump ();
+		Fire ();
+	}
 }
 
-bool Player::Stan () {
-	isStan_ = true;
-
-	if (isStan_) {
+void Player::Stan () {
+	if (stanTime_ >= 0) {
 		stanTime_--;
 	}
 
-	return isStan_;
+	if (stanTime_ == 0) {
+		isStan_ = false;
+	}
 }
 
 void Player::Update () {
+	Stan ();
 	//bulletNumの上限
 	if (bulletNum_ >= kMaxBullet) {
 		bulletNum_ = kMaxBullet;
@@ -143,7 +146,12 @@ void Player::Update () {
 void Player::Draw () {
 	
 	//player
-	Shape::DrawEllipse (pos_.x, pos_.y, radius_.x, radius_.y, 0.0f, WHITE, kFillModeSolid);
+	if(isStan_){
+		Shape::DrawEllipse (pos_.x, pos_.y, radius_.x, radius_.y, 0.0f, 0xffffffaa, kFillModeSolid);
+	}
+	else {
+		Shape::DrawEllipse (pos_.x, pos_.y, radius_.x, radius_.y, 0.0f, WHITE, kFillModeSolid);
+	}
 
 	//弾
 	for (auto& b : bullet) {

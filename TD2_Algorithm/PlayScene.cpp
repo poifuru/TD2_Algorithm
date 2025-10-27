@@ -193,6 +193,7 @@ void PlayScene::EnemyProcess () {
 		//敵とプレイヤー
 		if (e.IsCollision (player_->GetPositon (), player_->GetRadius ().x)) {
 			e.SetIsAlive ();
+			player_->SetIsStan ();
 		}
 	}
 

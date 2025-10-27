@@ -57,7 +57,6 @@ void Bullet::Update () {
 			pos_.x = pos_.x - kPos;
 		}
 	}
-	ImGui::Text ("recoverTime %d", recoverTime_);
 }
 
 void Bullet::Draw () {
