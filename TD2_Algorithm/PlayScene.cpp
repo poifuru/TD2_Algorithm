@@ -100,9 +100,9 @@ void PlayScene::Reflection () {
 					reflect.x *= -1.0f;
 				}
 			}
-			player_->SetWallTouch ();
 			//プレイヤーの速度に掛ける
 			player_->SetVelocity (reflect * kCOR);
+			player_->SetWallTouch ();
 		}
 
 		//弾と地面の当たり判定
@@ -143,6 +143,7 @@ void PlayScene::Reflection () {
 				}
 				//弾の速度に掛ける
 				b.SetVelocity (reflect * kCOR);
+				b.SetWallTouch ();
 			}
 		}
 	}

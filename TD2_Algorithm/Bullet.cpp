@@ -30,6 +30,7 @@ void Bullet::JudgeScreen () {
 
 void Bullet::SpeedCalculation () {
 	if (pos_.x - radius_.x <= 0.0f || pos_.x + radius_.x >= 500.0f) {
+		wallTouch_ = true;
 		velocity_.x *= -1.0f;
 	}
 	if (pos_.y - radius_.y <= 0.0f) {
@@ -84,10 +85,10 @@ void Bullet::Update () {
 		pos_.x += velocity_.x;
 		pos_.y -= velocity_.y;
 		//壁へのめり込み予防
-		if (pos_.x - radius_.x - velocity_.x <= 0.0f) {
+		/*if (pos_.x - radius_.x - velocity_.x <= 0.0f) {
 			pos_.x = pos_.x + kPos;
 		}
-		/*if (pos_.x + radius_.x + velocity_.x >= 500.0f) {
+		else if (pos_.x + radius_.x + velocity_.x >= 500.0f) {
 			pos_.x = pos_.x - kPos;
 		}*/
 	}
