@@ -1,6 +1,7 @@
 #include "Bullet.h"
 #include "Shape.h"
 #include "imgui.h"
+#include <cmath>
 
 const float kGravity = -8.5f;
 const float deltaTime = 1.0f / 60.0f;
@@ -13,6 +14,9 @@ void Bullet::Initialize (Vector2<float> pos, float sin, float cos) {
 	velocity_ = { sin * 10.0f, cos * 10.0f }; // 発射方向に速度を設定
 	isActive_ = false;
 	recoverTime_ = 60;
+	t_ = 0.0f;
+	result_ = 0.0f;
+	isReturn_ = false;
 }
 
 void Bullet::JudgeScreen () {
@@ -47,6 +51,30 @@ void Bullet::Collect () {
 	}
 }
 
+float Bullet::moveT (float second) {
+	float frame = second * 60;
+	float moveSpeed = 1.0f / frame;
+
+	if (t_ <= 1.0f) {
+		t_ += moveSpeed;
+	}
+
+	return t_;
+}
+
+float Bullet::easeInExpo (float t) {
+	return (t == 0.0f) ? 0.0f : std::pow (2.0f, 10.0f * t - 10.0f);
+}
+
+Vector2<float> Bullet::Return (Vector2<float> pos, float t) {
+	Vector2<float> v;
+
+	v.x = t * pos.x + (1 - t) * pos_.x;
+	v.y = t * pos.y + (1 - t) * pos_.y;
+
+	return v;
+}
+
 void Bullet::Update () {
 	if (isActive_) {
 		JudgeScreen ();
@@ -59,14 +87,14 @@ void Bullet::Update () {
 		if (pos_.x - radius_.x - velocity_.x <= 0.0f) {
 			pos_.x = pos_.x + kPos;
 		}
-		if (pos_.x + radius_.x + velocity_.x >= 500.0f) {
+		/*if (pos_.x + radius_.x + velocity_.x >= 500.0f) {
 			pos_.x = pos_.x - kPos;
-		}
+		}*/
 	}
 }
 
 void Bullet::Draw () {
-	if (isActive_) {
+	if (isActive_ || isReturn_) {
 		Shape::DrawEllipse (pos_.x, pos_.y, radius_.x, radius_.y, 0.0f, RED, kFillModeSolid);
 	}
 }

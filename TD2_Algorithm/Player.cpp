@@ -17,7 +17,7 @@ void Player::Initialize (Keyboard* keyboard) {
 	keyboard_ = keyboard;
 	pos_ = { 100.0f, 400.0f };
 	radius_ = { 40.0f, 40.0f };
-	velocity_ = {-1.0f, 0.0f};
+	velocity_ = { -1.0f, 0.0f };
 
 	cannonPos_ = { pos_.x, pos_.y - radius_.y };
 	cannonRadius_ = { 18.0f, 30.0f };
@@ -115,7 +115,7 @@ void Player::Stan () {
 }
 
 void Player::disCalculation (Vector2<float> pos) {
-	Vector2<float> vec = Subtract(pos, pos_);
+	Vector2<float> vec = Subtract (pos, pos_);
 	disToCore_ = { Length (vec) };
 }
 
@@ -125,17 +125,17 @@ void Player::Update () {
 	if (bulletNum_ >= kMaxBullet) {
 		bulletNum_ = kMaxBullet;
 	}
-	
+
 	//座標更新
 	pos_.x += velocity_.x;
 	pos_.y -= velocity_.y;
 
 	//壁へのめり込み予防
 	if (pos_.x - radius_.x - velocity_.x <= 0.0f) {
-		pos_.x = pos_.x + kPos;
+		pos_.x += kPos;
 	}
 	if (pos_.x + radius_.x + velocity_.x >= 500.0f) {
-		pos_.x = pos_.x - kPos;
+		pos_.x -= kPos;
 	}
 
 	//大砲
@@ -143,17 +143,26 @@ void Player::Update () {
 	//弾
 	for (auto& b : bullet) {
 		b.Update ();
-		if (b.IsRecovered()) {
-			bulletNum_ += 1;
+
+		if (b.IsRecovered ()) {
+			b.SetIsReturn (true);
 			b.SetIsActive (false);
+		}
+
+		if (b.GetIsReturn ()) {
+			b.SetPosition (b.Return (pos_, b.easeInExpo (b.moveT (0.5f))));
+			if (b.GetT () > 1.0f) {
+				bulletNum_++;
+				b.SetIsReturn (false);
+			}
 		}
 	}
 }
 
 void Player::Draw () {
-	
+
 	//player
-	if(isStan_){
+	if (isStan_) {
 		Shape::DrawEllipse (pos_.x, pos_.y, radius_.x, radius_.y, 0.0f, 0xffffffaa, kFillModeSolid);
 	}
 	else {
@@ -192,7 +201,7 @@ void Player::Draw () {
 }
 
 void Player::CollectBullet (int num) {
-	int collectedCount = 0;	
+	int collectedCount = 0;
 
 	for (size_t i = 0; i < bullet.size (); ++i) {
 		//現在の弾
@@ -200,6 +209,7 @@ void Player::CollectBullet (int num) {
 
 		if (b.GetIsActive ()) {
 			b.Collect ();
+
 			collectedCount++;
 		}
 

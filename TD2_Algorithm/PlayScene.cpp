@@ -213,10 +213,6 @@ void PlayScene::EnemyProcess () {
 }
 
 void PlayScene::Update () {
-	ImGui::Text ("coreHp %d", coreHp_);
-	ImGui::Text ("bulletNum : %d", player_->GetBulletNum ());
-	ImGui::Text ("enemyNum : %d", e_Manager_->GetEnemies ().size ());
-	ImGui::Text ("playerToCore :%f", player_->GetDisToCore ());
 	//時間のカウント
 	ingameTimer_ += deltaTime;
 	player_->Input ();
@@ -230,6 +226,11 @@ void PlayScene::Update () {
 	if (coreHp_ == 0) {
 		gameOver_ = true;
 	}
+
+	ImGui::Text ("coreHp %d", coreHp_);
+	ImGui::Text ("bulletNum : %d", player_->GetBulletNum ());
+	ImGui::Text ("enemyNum : %d", e_Manager_->GetEnemies ().size ());
+	ImGui::Text ("playerToCore :%f", player_->GetDisToCore ());
 }
 
 void PlayScene::Draw () {
