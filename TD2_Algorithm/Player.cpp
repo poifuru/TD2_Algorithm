@@ -147,15 +147,18 @@ void Player::Update () {
 		if (b.IsRecovered ()) {
 			b.SetIsReturn (true);
 			b.SetIsActive (false);
+			bulletNum_ += 1;
 		}
 
 		if (b.GetIsReturn ()) {
 			b.SetPosition (b.Return (pos_, b.easeInExpo (b.moveT (0.5f))));
 			if (b.GetT () > 1.0f) {
-				bulletNum_++;
 				b.SetIsReturn (false);
+				b.Initialize (Vector2<float>{1000.0f, 1000.0f}, 0.0f, 0.0f);
+				b.SetIsActive (false);
 			}
 		}
+		ImGui::Text ("isActive: %d", b.GetIsActive());
 	}
 }
 
@@ -209,7 +212,6 @@ void Player::CollectBullet (int num) {
 
 		if (b.GetIsActive ()) {
 			b.Collect ();
-
 			collectedCount++;
 		}
 
