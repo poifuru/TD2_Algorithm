@@ -131,12 +131,12 @@ void Player::Update () {
 	pos_.y -= velocity_.y;
 
 	//壁へのめり込み予防
-	/*if (pos_.x - radius_.x - velocity_.x <= 0.0f) {
-		pos_.x += kPos;
+	if (pos_.x - radius_.x < 0.0f) {
+		pos_.x = 0.0f + radius_.x;
 	}
-	else if (pos_.x + radius_.x + velocity_.x >= 500.0f) {
-		pos_.x -= kPos;
-	}*/
+	else if (pos_.x + radius_.x > 500.0f) {
+		pos_.x = 500.0f - radius_.x;
+	}
 
 	//大砲
 	Rotate ();
@@ -158,7 +158,6 @@ void Player::Update () {
 				b.SetIsActive (false);
 			}
 		}
-		ImGui::Text ("isActive: %d", b.GetIsActive());
 	}
 }
 

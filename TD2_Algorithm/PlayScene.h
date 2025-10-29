@@ -48,8 +48,10 @@ private:
 	//===敵のランダム生成===//
 	//経過時間のカウント
 	float ingameTimer_;
+	//ゲーム時間のカウント
+	float Timer_;
 	//生成した乱数を入れる箱
 	float time_;
 	//乱数の分布(敵を生成する目標時間)
-	std::uniform_real_distribution<float> spawnTime_;
+	std::uniform_real_distribution<float> spawnTime_[3];
 };

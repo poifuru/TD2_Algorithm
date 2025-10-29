@@ -8,8 +8,14 @@ const float kCOR = 0.80f;
 const float deltaTime = 1.0f / 60.0f;
 
 //敵の生成間隔の最小値、最大値
-const float kMinSpawnTime = 1.0f;
-const float kMaxSpawnTime = 5.0f;
+const float kMinSpawnTimeFase1 = 1.0f;
+const float kMaxSpawnTimeFase1 = 5.0f;
+
+const float kMinSpawnTimeFase2 = 0.7f;
+const float kMaxSpawnTimeFase2 = 3.0f;
+
+const float kMinSpawnTimeFase3 = 0.3f;
+const float kMaxSpawnTimeFase3 = 1.5f;
 
 void PlayScene::Initialize (Keyboard* keyboard) {
 	keyboard_ = keyboard;
@@ -47,10 +53,13 @@ void PlayScene::Initialize (Keyboard* keyboard) {
 	engine_.seed (rd ());
 	//分布の初期化
 	enemy_x_ = std::uniform_real_distribution<float> (25.0f, 475.0f);
-	spawnTime_ = std::uniform_real_distribution<float> (kMinSpawnTime, kMaxSpawnTime);
+	spawnTime_[0] = std::uniform_real_distribution<float> (kMinSpawnTimeFase1, kMaxSpawnTimeFase1);
+	spawnTime_[1] = std::uniform_real_distribution<float> (kMinSpawnTimeFase2, kMaxSpawnTimeFase2);
+	spawnTime_[2] = std::uniform_real_distribution<float> (kMinSpawnTimeFase3, kMaxSpawnTimeFase3);
 
 	ingameTimer_ = 0.0f;
-	time_ = spawnTime_ (engine_);
+	Timer_ = 0.0f;
+	time_ = spawnTime_[0] (engine_);
 }
 
 void PlayScene::Reflection () {
@@ -79,7 +88,7 @@ void PlayScene::Reflection () {
 			if (!area) { // 左側
 				if (player_->GetVelocity ().x > 0.0f && player_->GetWallTouch ()) {
 					reflect.x = std::abs (reflect.x);
-					reflect.x += 4.0f;
+					reflect.x += 3.0f;
 				}
 				else if (player_->GetVelocity ().x >= 0.0f) {
 					reflect.x = std::abs (reflect.x);
@@ -91,7 +100,7 @@ void PlayScene::Reflection () {
 			if (area) { // 右側
 				if (player_->GetVelocity ().x < 0.0f && player_->GetWallTouch ()) {
 					reflect.x = -std::abs (reflect.x);
-					reflect.x -= 4.0f;
+					reflect.x -= 3.0f;
 				}
 				else if (player_->GetVelocity ().x <= 0.0f) {
 					reflect.x = -std::abs (reflect.x);
@@ -120,7 +129,7 @@ void PlayScene::Reflection () {
 				if (!b.GetArea ()) { // 左側
 					if (b.GetVelocity ().x > 0.0f && b.GetWallTouch ()) {
 						reflect.x = std::abs (reflect.x);
-						reflect.x += 4.0f;
+						reflect.x += 3.0f;
 					}
 					else if (b.GetVelocity ().x >= 0.0f) {
 						reflect.x = std::abs (reflect.x);
@@ -132,7 +141,7 @@ void PlayScene::Reflection () {
 				if (b.GetArea ()) { // 右側
 					if (b.GetVelocity ().x < 0.0f && b.GetWallTouch ()) {
 						reflect.x = -std::abs (reflect.x);
-						reflect.x -= 4.0f;
+						reflect.x -= 3.0f;
 					}
 					else if (b.GetVelocity ().x <= 0.0f) {
 						reflect.x = -std::abs (reflect.x);
@@ -173,7 +182,15 @@ void PlayScene::EnemyProcess () {
 		//経過時間から今回スポーンにかかった時間を減算
 		ingameTimer_ -= time_;
 
-		time_ = spawnTime_ (engine_);
+		if (Timer_ <= 1200.0f) {
+			time_ = spawnTime_[0] (engine_);
+		}
+		else if (Timer_ <= 2400.0f) {
+			time_ = spawnTime_[1] (engine_);
+		}
+		else if (Timer_ <= 3600) {
+			time_ = spawnTime_[2] (engine_);
+		}
 	}
 
 	//敵の更新処理
@@ -216,12 +233,13 @@ void PlayScene::EnemyProcess () {
 void PlayScene::Update () {
 	//時間のカウント
 	ingameTimer_ += deltaTime;
+	Timer_++;
 	player_->Input ();
 	player_->SpeedCalculation ();
 	player_->disCalculation (circle_.pos);
 	player_->Update ();
-	BulletRecovery ();
 	Reflection ();
+	BulletRecovery ();
 	EnemyProcess ();
 
 	if (coreHp_ == 0) {
@@ -232,6 +250,7 @@ void PlayScene::Update () {
 	ImGui::Text ("bulletNum : %d", player_->GetBulletNum ());
 	ImGui::Text ("enemyNum : %d", e_Manager_->GetEnemies ().size ());
 	ImGui::Text ("playerToCore :%f", player_->GetDisToCore ());
+	ImGui::Text ("Timer : %f", Timer_);
 }
 
 void PlayScene::Draw () {
