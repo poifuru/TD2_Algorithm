@@ -11,10 +11,10 @@ const float deltaTime = 1.0f / 60.0f;
 const float kMinSpawnTimeFase1 = 1.0f;
 const float kMaxSpawnTimeFase1 = 5.0f;
 
-const float kMinSpawnTimeFase2 = 0.7f;
-const float kMaxSpawnTimeFase2 = 3.0f;
+const float kMinSpawnTimeFase2 = 0.75f;
+const float kMaxSpawnTimeFase2 = 3.5f;
 
-const float kMinSpawnTimeFase3 = 0.3f;
+const float kMinSpawnTimeFase3 = 0.4f;
 const float kMaxSpawnTimeFase3 = 1.5f;
 
 void PlayScene::Initialize (Keyboard* keyboard) {
