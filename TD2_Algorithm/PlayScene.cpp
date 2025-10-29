@@ -178,6 +178,7 @@ void PlayScene::EnemyProcess () {
 	if (ingameTimer_ >= time_) {
 		//敵を生成する	
 		e_Manager_->Spawn (enemy_x_ (engine_), circle_.pos);
+		e_Manager_->Spawn (enemy_x_ (engine_), circle_.pos);
 
 		//経過時間から今回スポーンにかかった時間を減算
 		ingameTimer_ -= time_;
@@ -222,7 +223,6 @@ void PlayScene::EnemyProcess () {
 
 		//敵とプレイヤー
 		if (e.IsCollision (player_->GetPositon (), player_->GetRadius ().x)) {
-			e.SetIsAlive ();
 			player_->SetIsStan ();
 		}
 	}
